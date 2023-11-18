@@ -63,18 +63,3 @@ def sendLog(data, filename):
         print("Log sent successfully")
     else:
         print(res.text)
-
-
-def checkLogs():
-    for file in logFiles:
-        readlog(file)
-
-
-if __name__ == "__main__":
-    checkLogs()
-
-
-# sendLog(
-#     "Nov 11 15:45:01 orangepizero3 CRON[1621785]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)",
-#     "auth.log",
-# )
