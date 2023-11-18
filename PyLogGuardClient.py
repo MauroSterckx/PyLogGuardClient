@@ -3,8 +3,7 @@ import json
 import requests
 
 logPath = "/var/log/"
-logFiles = ["auth.log"]
-# logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
+logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
 
 
 def readlog(file):
@@ -18,19 +17,18 @@ def readlog(file):
 
     # read log file
     try:
-        with open(file, "r") as f:
+        with open(logPath + file, "r") as f:
             # skip lines already read in previous run
             for _ in range(lastRead):
                 next(f)
             # read remaining lines
-            data = f.read()
-
-            # send data to server
-            sendLog(data, file)
+            for line in f:
+                # send each line to server
+                sendLog(line, file)
 
             # update bookmark
             with open(bookmark, "w") as bookmarkFile:
-                bookmarkFile.write(str(lastRead + data.count("\n")))
+                bookmarkFile.write(str(lastRead + sum(1 for _ in f)))
 
     except Exception as e:
         print(e)
