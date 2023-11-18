@@ -63,3 +63,25 @@ def sendLog(data, filename):
         print("Log sent successfully")
     else:
         print(res.text)
+
+
+def checkLogs():
+    for file in logFiles:
+        readlog(file)
+
+
+def serverReachable():
+    # read server address from config file
+    with open("API_data.json", "r") as f:
+        api_data = json.load(f)
+    server = api_data["server_ip"]
+
+    try:
+        # send a GET request to the server
+        response = requests.get(server)
+        if response.status_code == 200:
+            return True
+        else:
+            return False
+    except requests.exceptions.RequestException as e:
+        return False
