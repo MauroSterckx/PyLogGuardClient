@@ -10,10 +10,9 @@ logFiles = ["auth.log"]
 def readlog(file):
     # check if bookmark exists
     bookmark = f"bookmark_{file}.txt"
-    # if os.path.exists(bookmark):
     if os.path.exists(bookmark):
         with open(bookmark, "r") as f:
-            lastRead = f.read()
+            lastRead = int(f.read())
     else:
         lastRead = 0
 
@@ -58,7 +57,7 @@ def sendLog(data, filename):
     log = {"date": logDate, "device": logHost, "type": logType, "msg": log_Msg}
 
     # send log to server
-    res = requests.post(server, json=log)
+    res = requests.post(f"{server}/addTemp", json=log)
 
     if res.status_code == 200:
         print("Log sent successfully")
