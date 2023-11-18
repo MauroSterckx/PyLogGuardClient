@@ -3,7 +3,8 @@ import json
 import requests
 
 logPath = "/var/log/"
-logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
+logFiles = ["auth.log"]
+# logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
 
 
 def readlog(file):
@@ -18,7 +19,7 @@ def readlog(file):
 
     # read log file
     try:
-        with open(logPath + file, "r") as f:
+        with open(file, "r") as f:
             # skip lines already read in previous run
             for _ in range(lastRead):
                 next(f)
@@ -85,3 +86,11 @@ def serverReachable():
             return False
     except requests.exceptions.RequestException as e:
         return False
+
+
+if __name__ == "__main__":
+    if serverReachable():
+        checkLogs()
+    else:
+        print("Server not reachable")
+        # TODO send error to server + save log to file and send later
