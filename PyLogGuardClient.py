@@ -4,11 +4,12 @@ import requests
 
 logPath = "/var/log/"
 logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
-bookmark = "bookmark.txt"
 
 
 def readlog(file):
     # check if bookmark exists
+    bookmark = f"bookmark_{file}.txt"
+    # if os.path.exists(bookmark):
     if os.path.exists(bookmark):
         with open(bookmark, "r") as f:
             lastRead = f.read()
@@ -25,7 +26,7 @@ def readlog(file):
             data = f.read()
 
             # send data to server
-            # TODO
+            sendLog(data, file)
 
             # update bookmark
             with open(bookmark, "w") as bookmarkFile:
@@ -33,6 +34,7 @@ def readlog(file):
 
     except Exception as e:
         print(e)
+        # TODO send error to server
 
 
 def sendLog(data, filename):
@@ -63,7 +65,16 @@ def sendLog(data, filename):
         print(res.text)
 
 
-sendLog(
-    "Nov 11 15:45:01 orangepizero3 CRON[1621785]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)",
-    "auth.log",
-)
+def checkLogs():
+    for file in logFiles:
+        readlog(file)
+
+
+if __name__ == "__main__":
+    checkLogs()
+
+
+# sendLog(
+#     "Nov 11 15:45:01 orangepizero3 CRON[1621785]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)",
+#     "auth.log",
+# )
