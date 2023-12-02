@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from datetime import datetime
 
 logPath = "/var/log/"
 logFiles = ["auth.log", "syslog", "journal", "kern.log", "boot.log"]
@@ -61,6 +62,19 @@ def sendLog(data, filename):
         print("Log sent successfully")
     else:
         print(res.text)
+
+
+def sendOwnLog(data, logtype, hostname):
+    with open("API_data.json", "r") as f:
+        api_data = json.load(f)
+    server = api_data["server_ip"]
+
+    logDate = datetime.now().strftime("%b %d %H:%M:%S")
+    logHost = hostname
+    logType = logtype
+    log_Msg = data
+
+    log = {"date": logDate, "device": logHost, "type": logType, "msg": log_Msg}
 
 
 def checkLogs():
