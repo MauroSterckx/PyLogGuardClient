@@ -76,6 +76,14 @@ def sendOwnLog(data, logtype, hostname):
 
     log = {"date": logDate, "device": logHost, "type": logType, "msg": log_Msg}
 
+    # send log to server
+    res = requests.post(f"{server}/addTemp", json=log)
+
+    if res.status_code == 200:
+        print("Log sent successfully")
+    else:
+        print(res.text)
+
 
 def checkLogs():
     for file in logFiles:
